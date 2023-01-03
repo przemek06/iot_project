@@ -16,9 +16,9 @@ class RFID:
     def get_instance(cls, id):
         return cls.instances[id]
 
-    def start(self):
+    def read_loop(self):
         if (self.reading):
-            self.read()
+            self.read_all()
 
     def read_all(self):
         if self.reading:
