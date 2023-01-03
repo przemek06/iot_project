@@ -2,6 +2,9 @@ import RPi.GPIO as GPIO
 from button import Button
 from encoder import Encoder
 from card_handler import RFID
+from display import Display
+from ui.main_menu import MainMenuScreen
+from ui.screen import Screen
 
 GPIO.setmode(GPIO.BCM)  
 
@@ -23,18 +26,19 @@ def initialize_multitons():
     Encoder.add_instance("encoder", encoder)
     card_handler = RFID()
     RFID.add_instance("rfid", card_handler)
+    display = Display()
+    Display.add_instance("display", display)
+    main_menu_screen = MainMenuScreen()
+    Screen.add_instance("main_menu_screen", main_menu_screen)
 
 def main():
     initialize_multitons()
-    red_btn = Button.get_instance("red")
-    red_btn.on_click = print_sth
-    encoder = Encoder.get_instance("encoder")
-    encoder.callback = print_dir
     card_handler = RFID.get_instance("rfid")
-    card_handler.callback = print_data
-
+    main_menu_screen = Screen.get_instance("main_menu_screen")
+    main_menu_screen.start()
+    
     while True:     
-        card_handler.read_all()
+        card_handler.read_loop()
 
 if __name__ == "__main__":
     main()
