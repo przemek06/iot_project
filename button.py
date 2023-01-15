@@ -25,7 +25,7 @@ class Button:
         
     def handle_click(self, pin): 
         current_time = time.time() 
-        if current_time - self.last_change > 0.2:  
+        if current_time - self.last_change > 0.5:  
             self.last_change = current_time 
             if GPIO.input(pin) == 0:  
                 self.on_click()

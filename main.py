@@ -38,7 +38,7 @@ def main():
     main_menu_screen.start()
     
     while True:     
-        card_handler.read_loop()
+        card_handler.read_card()
 
 if __name__ == "__main__":
     main()

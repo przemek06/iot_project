@@ -1,4 +1,4 @@
-import SSD1331
+import oled.SSD1331 as SSD1331
 
 class Display:
 

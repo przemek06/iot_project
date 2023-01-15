@@ -17,6 +17,9 @@ class Screen:
     @classmethod
     def get_instance(cls, id):
         return cls.instances[id]
+        
+    def get_index(self):
+        return self.index
     
     def start(self):
         red_btn = Button.get_instance("red")

@@ -7,7 +7,7 @@ class RFID:
     instances = {}
 
     def __init__(self):
-        self.reading = True
+        self.reading = False
         self.reader = MFRC522()
 
     @classmethod
@@ -27,30 +27,30 @@ class RFID:
         self.reading = True
 
     def read_card(self):
-        signal.signal(signal.SIGINT, self.end_read)
+        if self.reading:
+            #signal.signal(signal.SIGINT, self.end_read)
 
-        MIFAREReader = self.reader
-        print("Press Ctrl-C to stop.")
+            MIFAREReader = self.reader
+            print("Press Ctrl-C to stop.")
 
-        while self.reading:
-            
-            # Scan for cards    
-            (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
+            while self.reading:
+                # Scan for cards    
+                (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
 
-            # If a card is found
-            if status == MIFAREReader.MI_OK:
-                print("Card detected")
-            
-            # Get the UID of the card
-            (status,uid) = MIFAREReader.MFRC522_Anticoll()
-
-            if status == MIFAREReader.MI_OK:
-                print("Card UID: {} {} {} {}".format(hex(uid[0]), hex(uid[1]), hex(uid[2]), hex(uid[3])))
+                # If a card is found
+                if status == MIFAREReader.MI_OK:
+                    print("Card detected")
                 
-                # Read card memory
-                key = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
-                self.read_card_memory(MIFAREReader, key, uid) 
-    
+                # Get the UID of the card
+                (status,uid) = MIFAREReader.MFRC522_Anticoll()
+
+                if status == MIFAREReader.MI_OK:
+                    print("Card UID: {} {} {} {}".format(hex(uid[0]), hex(uid[1]), hex(uid[2]), hex(uid[3])))
+                    
+                    # Read card memory
+                    key = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
+                    self.read_card_memory(MIFAREReader, key, uid) 
+        
     def read_block(self, MifareReader, key, uid, blockAddr):
         # Authenticate
         status = MifareReader.MFRC522_Auth(MifareReader.PICC_AUTHENT1A, blockAddr, key, uid)
@@ -157,18 +157,20 @@ class RFID:
                 MIFAREReader.MFRC522_SelectTag(uid)
 
                 # Authenticate
-                status = MIFAREReader.MFRC522_Auth(MIFAREReader.PICC_AUTHENT1A, 8, key, uid)
+                status = MIFAREReader.MFRC522_Auth(MIFAREReader.PICC_AUTHENT1A, block_number, key, uid)
 
                 # Check if authenticated
                 if status == MIFAREReader.MI_OK:
 
                     # TODO use this in read_by_block function
-                    print("Block 8 looked like this:")
-                    # Read block 8
-                    bd = MIFAREReader.MFRC522_Read(8)
-                    print("Block 8 ", bd, "\n")
+                    # print("Block 8 looked like this:")
+                    # # Read block 8
+                    # bd = MIFAREReader.MFRC522_Read(8)
+                    # print("Block 8 ", bd, "\n")
 
                     MIFAREReader.MFRC522_Write(block_number, data)
+                    status = MIFAREReader.MI_OK
+                    MIFAREReader.MFRC522_StopCrypto1()
 
     def callback(self, data):
         pass
