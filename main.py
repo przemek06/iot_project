@@ -6,7 +6,7 @@ from display import Display
 from ui.main_menu import MainMenuScreen
 from ui.screen import Screen
 
-GPIO.setmode(GPIO.BCM)  
+GPIO.setmode(GPIO.BCM)
 
 def print_sth():
     print("clicked")
