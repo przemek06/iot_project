@@ -14,6 +14,8 @@ from ui.success_screen import SuccessScreen
 from ui.read_ticket_list_screen import ReadTicketListScreen
 from ui.ticket_list_screen import TicketListScreen
 from ui.reset_card_screen import ResetCardScreen
+from ui.read_card_info_screen import ReadCardInfoScreen
+from ui.card_info_screen import CardInfoScreen
 
 GPIO.setmode(GPIO.BCM)
 
@@ -38,6 +40,8 @@ def initialize_multitons():
     read_ticket_list_screen = ReadTicketListScreen(main_menu_screen)
     ticket_list_screen = TicketListScreen(main_menu_screen)
     reset_card_screen = ResetCardScreen(main_menu_screen)
+    read_card_info_screen = ReadCardInfoScreen(main_menu_screen)
+    card_info_screen = CardInfoScreen(main_menu_screen)
 
     Screen.add_instance("main_menu_screen", main_menu_screen)
     Screen.add_instance("ticket_term_choice_screen", ticket_term_choice_screen)
@@ -49,6 +53,8 @@ def initialize_multitons():
     Screen.add_instance("read_ticket_list_screen", read_ticket_list_screen)
     Screen.add_instance("ticket_list_screen", ticket_list_screen)
     Screen.add_instance("reset_card_screen", reset_card_screen)
+    Screen.add_instance("read_card_info_screen", read_card_info_screen)
+    Screen.add_instance("card_info_screen", card_info_screen)
 
 
 def main():
