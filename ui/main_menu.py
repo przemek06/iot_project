@@ -17,7 +17,6 @@ class MainMenuScreen(Screen):
             card_reader = RFID.get_instance("rfid")
             card_reader.start_read()
 
-
         elif chosen_option == 1:
             pass
         elif chosen_option == 2:
@@ -45,7 +44,7 @@ class MainMenuScreen(Screen):
         self.disp.ShowImage(background,0,0)
 
             
-    def on_card_read(self, datat):
+    def on_card_read(self, data):
         data = []
 
         for x in range(0x0, 0x08):
