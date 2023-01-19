@@ -15,7 +15,7 @@ from ui.read_ticket_list_screen import ReadTicketListScreen
 from ui.ticket_list_screen import TicketListScreen
 from ui.reset_card_screen import ResetCardScreen
 
-GPIO.setmode(GPIO.BCM)  
+GPIO.setmode(GPIO.BCM)
 
 def initialize_multitons():
     red_btn = Button(5)
