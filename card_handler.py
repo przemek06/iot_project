@@ -1,8 +1,8 @@
 import mfrc522.MFRC522 as MFRC522
 import RPi.GPIO as GPIO
 import signal
-import CardMemory
-import Ticket
+from card_memory import CardMemory
+from ticket import Ticket
 
 class RFID:
 
@@ -86,7 +86,7 @@ class RFID:
                 if (block == 1):
                     balance = int.from_bytes(mem[0:5], byteorder="big")
                 elif (block != 0 and (block+1)%4 != 0):
-                    ticket = Ticket(
+                    ticket = ticket(
                         mem[0], # is_reduced
                         mem[1], # line
                         int.from_bytes(mem[2:10], byteorder="big") # validity date
@@ -103,7 +103,7 @@ class RFID:
         self.reading = False
         print ("Card memory read end") 
 
-        card_memory = CardMemory(
+        card_memory = card_memory(
             uid,
             balance,
             tickets
