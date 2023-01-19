@@ -1,59 +1,25 @@
 from display import Display
 from ui.screen import Screen
+from ui.components.new_screen_menu_option import NewScreenMenuOption
 from PIL import Image,ImageDraw,ImageFont
-from card_handler import RFID
 
 
 class MainMenuScreen(Screen):
 
-    def __init__(self):
-        super().__init__()
-        self.options = ["Buy tickets", "Check all tickets", "Check validity", "Check card ID"]
+    def __init__(self, parent):
+        super().__init__(parent)
+        menu_option_1 = NewScreenMenuOption("Buy tickets", Screen.get_instance("ticket_term_choice_screen"))
+        menu_option_2 = NewScreenMenuOption("List tickets", Screen.get_instance("read_ticket_list_screen"))
+        menu_option_3 = NewScreenMenuOption("Check validity", None)
+        menu_option_4 = NewScreenMenuOption("Show card info", None)
+        menu_option_5 = NewScreenMenuOption("Clean card", Screen.get_instance("reset_card_screen"))
+
+        self.options = [menu_option_1, menu_option_2, menu_option_3, menu_option_4, menu_option_5]
+        self.options_length = len(self.options)
         self.disp = Display.get_instance("display").disp
     
     def on_green_button_click(self):
-        chosen_option = super().get_index() % 4
-        if chosen_option == 0:
-            card_reader = RFID.get_instance("rfid")
-            card_reader.start_read()
-
-
-        elif chosen_option == 1:
-            pass
-        elif chosen_option == 2:
-            pass
-        elif chosen_option == 3:
-            pass
+        super().open_chosen_menu(self.options)
 
     def draw_screen(self):
-        chosen_option = super().get_index() % 4
-        background = Image.new("RGB", (self.disp.width, self.disp.height), "BLACK")
-
-        for ind, option in enumerate(self.options):
-            back_color = "BLACK"
-            font_color = "WHITE"
-
-            if ind == chosen_option:
-                back_color = "WHITE"
-                font_color = "BLACK"
-
-            row = Image.new("RGB", (self.disp.width, 12), back_color)
-            draw = ImageDraw.Draw(row)
-            draw.text((8, 0), option, fill = font_color)
-            background.paste(row, (0, 12*ind))
-
-        self.disp.ShowImage(background,0,0)
-
-            
-    def on_card_read(self, datat):
-        data = []
-
-        for x in range(0x0, 0x08):
-            data.append(x)
-        
-        for x in range(0x0, 0xF8):
-            data.append(0)
-
-        card_reader = RFID.get_instance("rfid")
-        card_reader.write_to_card(2, data)
-        print(card_reader.reading)
+        super().draw_option_menu(self.disp, self.options)
