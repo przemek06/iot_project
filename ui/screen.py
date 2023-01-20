@@ -12,6 +12,7 @@ class Screen:
         super().__init__()
         self.index = 0
         self.parent = parent
+        self.__y_translation = 0
 
     @classmethod
     def add_instance(cls, id, screen):
@@ -71,6 +72,8 @@ class Screen:
         chosen_option = self.get_index() % options_length
         background = Image.new("RGB", (disp.width, disp.height), "BLACK")
 
+        self.update_translation(chosen_option, disp.height)
+
         for ind, option in enumerate(options):
             back_color = "BLACK"
             font_color = "WHITE"
@@ -84,7 +87,18 @@ class Screen:
             draw.text((2, 0), option.text, fill = font_color)
             background.paste(row, (0, 12*ind))
 
-        disp.ShowImage(background,0,0)
+        disp.ShowImage(background, 0, self.__y_translation)
+
+    def update_translation(self, chosen_index, display_height):
+        upper_line = 12*chosen_index
+        bottom_line = 12 + upper_line
+
+        if bottom_line + self.__y_translation > display_height:
+            self.__y_translation = display_height - bottom_line
+
+        if upper_line + self.__y_translation < 0:
+            self.__y_translation = - upper_line
+            
 
     def draw_centered_text(self, disp, text):
         background = Image.new("RGB", (disp.width, disp.height), "BLACK")
