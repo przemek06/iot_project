@@ -21,6 +21,7 @@ from ui.validity_screen import ValidityScreen
 from ui.recharge_options_screen import RechargeOptionsScreen
 from ui.recharge_screen import RechargeScreen
 from mqtt_queue import Queue
+from buzzer import Buzzer
 
 GPIO.setmode(GPIO.BCM)
 
@@ -37,6 +38,8 @@ def initialize_multitons():
     Display.add_instance("display", display)
     queue = Queue()
     Queue.add_instance("queue", queue)
+    buzzer = Buzzer()
+    Buzzer.add_instance("buzzer", buzzer)
     
     main_menu_screen = MainMenuScreen(None)
     ticket_term_choice_screen = TicketTermChoiceScreen(main_menu_screen)
@@ -77,9 +80,11 @@ def main():
     card_handler = RFID.get_instance("rfid")
     main_menu_screen = Screen.get_instance("main_menu_screen")
     main_menu_screen.start()
-    
+    buzzer = Buzzer.get_instance("buzzer")
+
     while True:     
         card_handler.read_card()
+        buzzer.update()
 
 if __name__ == "__main__":
     main()

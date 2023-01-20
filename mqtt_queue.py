@@ -30,7 +30,7 @@ class Queue:
     def send_recharge_info(self, uid, price):
         message = {"uid": uid, "price": price}
         message_json = json.dumps(message)
-        self.client.publish(self.topic, message_json, 0, True)
+        self.client.publish(self.topic, message_json, 2, True)
 
     def on_connect(self, client, userdata, flags, rc):                # function called on connected
         if rc==0:
