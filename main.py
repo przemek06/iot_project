@@ -22,6 +22,7 @@ from ui.recharge_options_screen import RechargeOptionsScreen
 from ui.recharge_screen import RechargeScreen
 from mqtt_queue import Queue
 from buzzer import Buzzer
+from led import Led
 
 GPIO.setmode(GPIO.BCM)
 
@@ -40,6 +41,8 @@ def initialize_multitons():
     Queue.add_instance("queue", queue)
     buzzer = Buzzer()
     Buzzer.add_instance("buzzer", buzzer)
+    led = Led()
+    Led.add_instance("led", led)
     
     main_menu_screen = MainMenuScreen(None)
     ticket_term_choice_screen = TicketTermChoiceScreen(main_menu_screen)

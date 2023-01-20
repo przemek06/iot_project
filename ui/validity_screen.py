@@ -1,6 +1,7 @@
 from display import Display
 from ui.screen import Screen
 from buzzer import Buzzer
+from led import Led
 
 class ValidityScreen(Screen):
     def __init__(self, parent):
@@ -9,10 +10,21 @@ class ValidityScreen(Screen):
         self.is_valid = False
 
     def start(self):
-        super().start()
-        if not self.is_valid:
+        led = Led.get_instance("led")
+
+        if self.is_valid:
+            led.green_light()
+        else:
             buzzer = Buzzer.get_instance("buzzer")
             buzzer.schedule_buzz(2)
+            led.red_light()
+
+        super().start()
+
+    def on_red_button_click(self):
+        led = Led.get_instance("led")
+        led.turn_off()
+        super().on_red_button_click()
 
     def draw_screen(self):
         if self.is_valid:
