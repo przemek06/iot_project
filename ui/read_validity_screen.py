@@ -1,8 +1,10 @@
 from display import Display
 from ui.screen import Screen
+from ui.components.new_screen_menu_option import NewScreenMenuOption
 from card_handler import RFID
+from config import Config
 
-class ReadCardInfoScreen(Screen):
+class ReadValidityScreen(Screen):
     def __init__(self, parent):
         super().__init__(parent)
         self.disp = Display.get_instance("display").disp
@@ -22,10 +24,17 @@ class ReadCardInfoScreen(Screen):
 
     def on_card_read(self, card_memory):
         try:
-            card_info_screen = Screen.get_instance("card_info_screen")
-            card_info_screen.card_memory = card_memory
-            card_info_screen.start()
+            validity_screen = Screen.get_instance("validity_screen")
+            for ticket in card_memory.tickets:
+                line_number = Config.read_property("line_number")
+                if ticket.is_fully_valid(line_number):
+                    validity_screen.is_valid = True
+                    validity_screen.start()
+                    return
             
+            validity_screen.is_valid = False
+            validity_screen.start()
+
         except Exception as e:
             print(e)
             error_screen = Screen.get_instance("error_screen")

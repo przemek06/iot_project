@@ -7,4 +7,5 @@ class NewScreenMenuOption(MenuOption):
         self.screen = screen
 
     def on_click(self):
-        self.screen.start()
+        if self.screen is not None:
+            self.screen.start()

@@ -16,6 +16,11 @@ from ui.ticket_list_screen import TicketListScreen
 from ui.reset_card_screen import ResetCardScreen
 from ui.read_card_info_screen import ReadCardInfoScreen
 from ui.card_info_screen import CardInfoScreen
+from ui.read_validity_screen import ReadValidityScreen
+from ui.validity_screen import ValidityScreen
+from ui.recharge_options_screen import RechargeOptionsScreen
+from ui.recharge_screen import RechargeScreen
+from mqtt_queue import Queue
 
 GPIO.setmode(GPIO.BCM)
 
@@ -30,6 +35,9 @@ def initialize_multitons():
     RFID.add_instance("rfid", card_handler)
     display = Display()
     Display.add_instance("display", display)
+    queue = Queue()
+    Queue.add_instance("queue", queue)
+    
     main_menu_screen = MainMenuScreen(None)
     ticket_term_choice_screen = TicketTermChoiceScreen(main_menu_screen)
     short_term_tickets_screen = ShortTermTicketsScreen(ticket_term_choice_screen)
@@ -42,6 +50,10 @@ def initialize_multitons():
     reset_card_screen = ResetCardScreen(main_menu_screen)
     read_card_info_screen = ReadCardInfoScreen(main_menu_screen)
     card_info_screen = CardInfoScreen(main_menu_screen)
+    read_validity_screen = ReadValidityScreen(main_menu_screen)
+    validity_screen = ValidityScreen(main_menu_screen)
+    recharge_options_screen = RechargeOptionsScreen(main_menu_screen)
+    recharge_screen = RechargeScreen(recharge_options_screen)
 
     Screen.add_instance("main_menu_screen", main_menu_screen)
     Screen.add_instance("ticket_term_choice_screen", ticket_term_choice_screen)
@@ -55,7 +67,10 @@ def initialize_multitons():
     Screen.add_instance("reset_card_screen", reset_card_screen)
     Screen.add_instance("read_card_info_screen", read_card_info_screen)
     Screen.add_instance("card_info_screen", card_info_screen)
-
+    Screen.add_instance("read_validity_screen", read_validity_screen)
+    Screen.add_instance("validity_screen", validity_screen)
+    Screen.add_instance("recharge_options_screen", recharge_options_screen)
+    Screen.add_instance("recharge_screen", recharge_screen)
 
 def main():
     initialize_multitons()

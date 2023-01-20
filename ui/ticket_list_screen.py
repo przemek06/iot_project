@@ -17,12 +17,31 @@ class TicketListScreen(Screen):
             return
 
         background = Image.new("RGB", (self.disp.width, self.disp.height), "BLACK")
-        attributes = ["ID", "Line number", "Valid to", "Reduced price"]
+        current_ticket = super().get_index() % len(self.tickets)
 
-        for i, attribute in enumerate(attributes):
-            row = Image.new("RGB", (self.disp.width, 12), "BLACK")
-            draw = ImageDraw.Draw(row)
-            draw.text((8, 0), attribute + ": " + "test", fill = "WHITE")
-            background.paste(row, (8, 12 + 12*i))
+        id_row = Image.new("RGB", (self.disp.width, 12), "BLACK")
+        draw = ImageDraw.Draw(id_row)
+        draw.text((0, 0), "ID: " + current_ticket, fill = "WHITE")
+        background.paste(id_row, (0, 0))
+
+        line_row = Image.new("RGB", (self.disp.width, 12), "BLACK")
+        draw = ImageDraw.Draw(line_row)
+        draw.text((0, 0), "Line: " + self.tickets[current_ticket].line, fill = "WHITE")
+        background.paste(line_row, (0, 12))
+
+        valid_row = Image.new("RGB", (self.disp.width, 12), "BLACK")
+        draw = ImageDraw.Draw(valid_row)
+        draw.text((0, 0), "Valid to:", fill = "WHITE")
+        background.paste(valid_row, (0, 24))
+
+        date_row = Image.new("RGB", (self.disp.width, 12), "BLACK")
+        draw = ImageDraw.Draw(date_row)
+        draw.text((0, 0), self.tickets[current_ticket].get_readable_date(), fill = "WHITE")
+        background.paste(date_row, (0, 36))
+
+        student_row = Image.new("RGB", (self.disp.width, 12), "BLACK")
+        draw = ImageDraw.Draw(student_row)
+        draw.text((0, 0), "Student: " + bool(self.tickets[current_ticket].is_reduced), fill = "WHITE")
+        background.paste(student_row, (0, 48))
 
         self.disp.ShowImage(background, 0, 0)  

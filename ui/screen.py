@@ -48,7 +48,7 @@ class Screen:
 
     def open_chosen_menu(self, options):
         options_length = len(options)
-        chosen_option = super().get_index() % options_length
+        chosen_option = self.get_index() % options_length
         if options[chosen_option] is not None:
             options[chosen_option].on_click()
 
@@ -81,7 +81,7 @@ class Screen:
 
             row = Image.new("RGB", (disp.width, 12), back_color)
             draw = ImageDraw.Draw(row)
-            draw.text((8, 0), option.text, fill = font_color)
+            draw.text((2, 0), option.text, fill = font_color)
             background.paste(row, (0, 12*ind))
 
         disp.ShowImage(background,0,0)
@@ -91,10 +91,10 @@ class Screen:
 
         row = Image.new("RGB", (disp.width, 12), "BLACK")
         draw = ImageDraw.Draw(row)
-        draw.text((8, 0), text, fill = "WHITE")
+        draw.text((0, 0), text, fill = "WHITE")
         font = draw.font
-        offset = 48 - font.getsize(text) // 2
+        offset = 48 - font.getsize(text)[0] // 2
 
-        background.paste(row, (offset, 32))
+        background.paste(row, (offset, 30))
 
         disp.ShowImage(background, 0, 0)  

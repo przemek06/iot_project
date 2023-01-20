@@ -20,10 +20,9 @@ class RFID:
     def get_instance(cls, id):
         return cls.instances[id]
 
-    def end_read(self, signal, frame):
+    def end_read(self):
         print("Ending read.")
         self.reading = False
-        GPIO.cleanup()
 
     def start_read(self):
         self.reading = True
@@ -84,9 +83,9 @@ class RFID:
             if status == MifareReader.MI_OK:
 
                 if (block == 1):
-                    balance = int.from_bytes(mem[0:5], byteorder="big")
+                    balance = int.from_bytes(mem[0:16], byteorder="big")
                 elif (block != 0 and (block+1)%4 != 0):
-                    ticket = ticket(
+                    ticket = Ticket(
                         mem[0], # is_reduced
                         mem[1], # line
                         int.from_bytes(mem[2:10], byteorder="big") # validity date
@@ -103,7 +102,7 @@ class RFID:
         self.reading = False
         print ("Card memory read end") 
 
-        card_memory = card_memory(
+        card_memory = CardMemory(
             uid,
             balance,
             tickets
@@ -112,6 +111,7 @@ class RFID:
         self.callback(card_memory)
 
     def write_all_to_card(self, data):
+        print("Writing to card")
         # Create an object of the class MFRC522
         MIFAREReader = self.reader
 
@@ -136,29 +136,30 @@ class RFID:
                 key = [0xFF,0xFF,0xFF,0xFF,0xFF,0xFF]
                 
                 MIFAREReader.MFRC522_SelectTag(uid)
+                print("Selected tag")
 
                 block = 0
                 i = 0
 
-                while i < len(data.tickets):
-
+                while block < 64:
+                    print("Writing to block: " + str(block))
+                    
                     # Authenticate
                     status = MIFAREReader.MFRC522_Auth(MIFAREReader.PICC_AUTHENT1A, block, key, uid)
+                    print("Authenticated")
 
                     if status == MIFAREReader.MI_OK:
                         if (block == 1):
-                            MIFAREReader.MFRC522_Write(block, data.balance.get_writeable_balance(), 16)
+                            MIFAREReader.MFRC522_Write(block, data.get_writeable_balance())
+                            print("Written balance")
                         elif (block != 0 and (block+1)%4 != 0):
-                            MIFAREReader.MFRC522_Write(block, data.tickets[i].get_writeable(), 16)
+                            MIFAREReader.MFRC522_Write(block, data.tickets[i].get_writeable())
+                            print("Written ticket")
                             i = i+1
 
                         block = block+1
-
-                zeroes = [0] * 16
-
-                while block < 64:
-                    MIFAREReader.MFRC522_Write(block, zeroes, 16)
-                    block = block+1
+                
+                # todo error when card moved out
                 
                 MIFAREReader.MFRC522_StopCrypto1()
 
