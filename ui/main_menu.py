@@ -1,7 +1,6 @@
 from display import Display
 from ui.screen import Screen
 from ui.components.new_screen_menu_option import NewScreenMenuOption
-from PIL import Image,ImageDraw,ImageFont
 
 
 class MainMenuScreen(Screen):

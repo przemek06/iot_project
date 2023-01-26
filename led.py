@@ -6,8 +6,8 @@ class Led:
     instances = {}
 
     @classmethod
-    def add_instance(cls, id, encoder):
-        cls.instances[id] = encoder
+    def add_instance(cls, id, led):
+        cls.instances[id] = led
 
     @classmethod
     def get_instance(cls, id):

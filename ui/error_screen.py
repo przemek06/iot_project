@@ -1,6 +1,7 @@
 from display import Display
 from ui.screen import Screen
 from led import Led
+from buzzer import Buzzer
 
 class ErrorScreen(Screen):
     def __init__(self, parent):

@@ -7,10 +7,10 @@ class BuyTicketScreen(Screen):
     def __init__(self, parent):
         super().__init__(parent)
         self.ticket = None
-        self.disp = Display.get_instance("display").disp
-        self.rfid = RFID.get_instance("rfid")
 
     def start(self):
+        self.disp = Display.get_instance("display").disp
+        self.rfid = RFID.get_instance("rfid")
         self.rfid.start_read()
         super().start()
 
