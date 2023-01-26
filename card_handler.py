@@ -77,13 +77,11 @@ class RFID:
         data = []
         tickets = []
         balance = None
-        uid_readable = None
+        uid_readable = int.from_bytes(uid, byteorder="big")
         
         for block in range(64):
             (status, mem) = self.read_block(MifareReader, key, uid, block)
             if status == MifareReader.MI_OK:
-                if block == 0:
-                    uid_readable = int.from_bytes(uid, byteorder="big")
                 if (block == 1):
                     balance = int.from_bytes(mem[0:16], byteorder="big")
                 elif (block != 0 and (block+1)%4 != 0):
